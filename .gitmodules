@@ -1,0 +1,9 @@
+[submodule "HamCC"]
+	path = HamCC
+	url = https://github.com/gitandy/HamCC.git
+[submodule "maidenhead"]
+	path = maidenhead
+	url = https://github.com/space-physics/maidenhead.git
+[submodule "PyADIF-File"]
+	path = PyADIF-File
+	url = https://github.com/gitandy/PyADIF-File.git
