@@ -1,4 +1,4 @@
-VENV_DIR = venv
+VENV_DIR ?= venv
 VER = $(shell git describe --tags)
 VERSION = $(firstword $(subst -, ,$(VER)))
 ifeq ($(shell git diff --name-only),)
@@ -22,7 +22,11 @@ PYTHON = $(VENV_BIN)/python
 endif
 endif
 
+PIP ?= pip
+
 all:  dragonlog/__version__.py ui_files i18n help_md contests_md
+
+ubuntu:  submodules dragonlog/__version__.py ui_files_native i18n_native help_md contests_md
 
 contests_md:
 	$(PYTHON) -m dragonlog.contest AVAILABLE_CONTESTS.md
@@ -38,8 +42,22 @@ help_md:
 ui_files:
 	$(MAKE) -C ui_files VENV_BIN=../$(VENV_BIN)
 
+ui_files_native:
+	$(MAKE) -C ui_files PYUIC6=pyuic6
+
 i18n:
 	$(MAKE) -C i18n NO_OBSOLETE=$(NO_OBSOLETE) VENV_BIN=../$(VENV_BIN)
+
+i18n_native:
+	$(MAKE) -C i18n NO_OBSOLETE=$(NO_OBSOLETE) QT6_TOOLS=/usr/lib/qt6/bin/lrelease PYLUPDATE6=pylupdate6
+
+submodules:
+	$(MAKE) -C PyADIF-File src/adif_file/__version__.py
+	$(MAKE) -C HamCC src/hamcc/__version__.py
+	$(PIP) install -e PyADIF-File
+	$(PIP) install -e HamCC
+	$(PIP) install -e maidenhead
+
 
 dragonlog/__version__.py:
 	echo __version__ = \'$(VERSION)\' > $@
