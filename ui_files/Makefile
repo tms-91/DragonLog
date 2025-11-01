@@ -1,11 +1,12 @@
-VENV_BIN = ../venv/bin
+VENV_BIN ?= ../venv/bin
 UI_FILES = $(wildcard *.ui)
 PYUI_FILES = $(UI_FILES:.ui=_ui.py)
+PYUIC6 ?= $(VENV_BIN)/pyuic6
 
 all:  $(PYUI_FILES)
 
 %_ui.py: %.ui
-	$(VENV_BIN)/pyuic6 -o $@ $<;
+	$(PYUIC6) -o $@ $<;
 	cp $@ ../dragonlog;
 
 clean:
